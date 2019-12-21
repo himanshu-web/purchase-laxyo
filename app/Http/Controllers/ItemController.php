@@ -9,6 +9,9 @@ use App\unitofmeasurement;
 use App\item_category;
 use App\location;
 use Illuminate\Http\Request;
+use Helper;
+//use Illuminate\Support\Facades\DB;
+use DB;
 
 class ItemController extends Controller
 {
@@ -43,7 +46,8 @@ class ItemController extends Controller
         $location = location::get();
         $brand = Brand::get();
         $department = Department::get();
-        return view('item.create',compact('units','category','location','brand', 'department'));
+        $item = item::get();
+        return view('item.create',compact('units','category','location','brand', 'department','item'));
     }
 
     /**
@@ -54,13 +58,26 @@ class ItemController extends Controller
      */
     public function store(Request $request)
     {
+        
+        $id = Helper::getAutoIncrementId();
+
+        $cat = str_pad($request->category_id, 2, '0', STR_PAD_LEFT);
+        $unit = str_pad($request->unit_id, 3, '0', STR_PAD_LEFT);
+        $item = str_pad($id, 4, '0', STR_PAD_LEFT);
+        $barcode = $cat.$unit.$item;
+        $request['item_number'] = $barcode;
+       
+        
+
         $request->validate([
-            'item_number' => 'required',
             'unit_id' => 'required',
             'category_id' => 'required',
             'title' => 'required|unique:items',
             'description' => 'required'
         ]);
+         
+        
+        
   
         item::create($request->all());
    

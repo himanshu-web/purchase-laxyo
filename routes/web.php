@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Auth::routes();
@@ -36,6 +36,8 @@ Route::get('invoice', 'PurchaseController@invoice')->name('invoice');
 Route::get('cartRestore', 'PurchaseController@cartRestore')->name('cartRestore');
 Route::get('generateInvoiceNumber', 'PurchaseController@generateInvoiceNumber')->name('generateInvoiceNumber');
 Route::get('/unique_invoice/{id}/', 'ItemPurchaseHistoryController@show')->name('show');
+Route::get('/profile','UserController@index')->name('profile');
+Route::post('/profile','UserController@store')->name('profile');
 
 
 /*$cat_id = 01;
